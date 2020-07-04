@@ -3,18 +3,19 @@ package com.bulefy.api.models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.bulefy.api.dtos.LembreteDTO;
+import com.bulefy.api.dtos.RemedioDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +29,7 @@ public class Lembrete {
 	
 	public Lembrete(LembreteDTO dto) {
 		this.dataHora = this.converteData(dto.getDataHora());
-		this.remedio = new Remedio(dto.getRemedio());
+		this.remedio = this.setRemedios(dto.getRemedio());
 	}
 	
 	@Id
@@ -39,8 +40,8 @@ public class Lembrete {
 	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<Data> dataHora;
 	
-	@OneToOne(cascade = CascadeType.PERSIST)
-	private Remedio remedio;
+	@OneToMany(cascade = CascadeType.PERSIST)
+	private List<Remedio> remedio;
 	
 	//dd/MM/yyyy-HH:mm
 	@SuppressWarnings("deprecation")
@@ -65,5 +66,10 @@ public class Lembrete {
 		}
 		
 		return datas;
+	}
+	
+	private List<Remedio> setRemedios(List<RemedioDTO> remediosDto) {
+		List<Remedio> remedios = remediosDto.stream().map(Remedio::new).collect(Collectors.toList());
+		return remedios;
 	}
 }
