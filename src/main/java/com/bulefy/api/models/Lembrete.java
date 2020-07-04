@@ -1,12 +1,14 @@
 package com.bulefy.api.models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -34,30 +36,34 @@ public class Lembrete {
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
-	@Column(name = "dia_hora_lembrete")
-	private Date dataHora;
+	@OneToMany(cascade = CascadeType.PERSIST)
+	private List<Data> dataHora;
 	
 	@OneToOne(cascade = CascadeType.PERSIST)
 	private Remedio remedio;
 	
 	//dd/MM/yyyy-HH:mm
 	@SuppressWarnings("deprecation")
-	private Date converteData(String data) {
+	private List<Data> converteData(List<String> data) {
+		List<Data> datas = new ArrayList<>();
 		
-		String[] dataSplit = data.split("-");
+		for (String d : data) {
+			String[] dataSplit = d.split("-");
+			
+			String[] dataCalendario = dataSplit[0].split("/");
+			String[] horas = dataSplit[1].split(":");
+			
+			int ano = Integer.valueOf(dataCalendario[2]);
+			int mes = Integer.valueOf(dataCalendario[1]) - 1;
+			int dia = Integer.valueOf(dataCalendario[0]);
+			
+			int hora = Integer.valueOf(horas[0]);
+			int minuto = Integer.valueOf(horas[1]); 
+			
+			Date date = new Date(ano - 1900, mes, dia, hora, minuto);
+			datas.add(new Data(date));
+		}
 		
-		String[] dataCalendario = dataSplit[0].split("/");
-		String[] horas = dataSplit[1].split(":");
-		
-		int ano = Integer.valueOf(dataCalendario[2]);
-		int mes = Integer.valueOf(dataCalendario[1]) - 1;
-		int dia = Integer.valueOf(dataCalendario[0]);
-		
-		int hora = Integer.valueOf(horas[0]);
-		int minuto = Integer.valueOf(horas[1]);
-		
-		Date date = new Date(ano, mes, dia, hora, minuto);
-		
-		return date;
+		return datas;
 	}
 }
