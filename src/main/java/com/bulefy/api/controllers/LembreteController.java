@@ -7,11 +7,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bulefy.api.dtos.LembreteDTO;
@@ -28,9 +28,10 @@ public class LembreteController {
 	@Autowired
 	private UsuarioService usuarioService;
 	
-	@PostMapping("/reminder")
+	@PostMapping("/user/reminder")
 	public ResponseEntity<Response<LembreteDTO>> criarLembrete(@Valid @RequestBody LembreteDTO dto, 
-							@RequestParam("usuario") String emailUsuario, BindingResult result) throws UsuarioException {
+																	Authentication auth,
+																	BindingResult result) throws UsuarioException {
 		Response<LembreteDTO> response = new Response<>();
 		
 		if(result.hasErrors()) {
@@ -43,7 +44,7 @@ public class LembreteController {
 			return ResponseEntity.badRequest().body(response);
 		}
 		
-		Usuario usuario = usuarioService.buscarPorEmail(emailUsuario)
+		Usuario usuario = usuarioService.buscarPorEmail(auth.getName())
 								.orElseThrow(() -> new UsuarioException("Usuário inexistente"));
 		
 		usuario.addLembrete(new Lembrete(dto));
