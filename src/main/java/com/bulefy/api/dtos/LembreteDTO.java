@@ -3,6 +3,9 @@ package com.bulefy.api.dtos;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import com.bulefy.api.models.Data;
 import com.bulefy.api.models.Lembrete;
 import com.bulefy.api.models.Remedio;
@@ -20,7 +23,8 @@ public class LembreteDTO {
 		this.remedio = this.setRemedioDto(lembrete.getRemedio());
 	}
 	
-	//@NotNull(message = "A data não pode ser vazia")
+	@NotNull(message = "A data não pode ser vazia")
+	@NotEmpty(message = "A data não pode ser vazia")
 	private List<String> dataHora;
 	
 	private List<RemedioDTO> remedio;

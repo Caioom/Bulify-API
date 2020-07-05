@@ -1,5 +1,7 @@
 package com.bulefy.api.models;
 
+import static java.lang.Integer.valueOf;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,12 +56,12 @@ public class Lembrete {
 			String[] dataCalendario = dataSplit[0].split("/");
 			String[] horas = dataSplit[1].split(":");
 			
-			int ano = Integer.valueOf(dataCalendario[2]);
-			int mes = Integer.valueOf(dataCalendario[1]) - 1;
-			int dia = Integer.valueOf(dataCalendario[0]);
+			int ano = valueOf(dataCalendario[2]);
+			int mes = valueOf(dataCalendario[1]) - 1;
+			int dia = valueOf(dataCalendario[0]);
 			
-			int hora = Integer.valueOf(horas[0]);
-			int minuto = Integer.valueOf(horas[1]); 
+			int hora = valueOf(horas[0]);
+			int minuto = valueOf(horas[1]); 
 			
 			Date date = new Date(ano - 1900, mes, dia, hora, minuto);
 			datas.add(new Data(date));

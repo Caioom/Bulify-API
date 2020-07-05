@@ -1,5 +1,7 @@
 package com.bulefy.api.controllers;
 
+import static com.bulefy.api.utils.PasswordUtils.encode;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +31,7 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
 	
-	@PostMapping("/user")
+	@PostMapping("/register")
 	public ResponseEntity<Response<Long>> criarNovo(@Valid @RequestBody UsuarioDTO usuarioDto, BindingResult result) {
 		Response<Long> response = new Response<>();
 		if(result.hasErrors()) {
@@ -43,7 +45,9 @@ public class UsuarioController {
 		
 		Usuario usuario;
 		try {
-			usuario = usuarioService.persistir(new Usuario(usuarioDto));
+			Usuario user = new Usuario(usuarioDto);
+			user.setSenha(encode(usuarioDto.getSenha()));
+			usuario = usuarioService.persistir(user);
 		} catch (UsuarioException e) {
 			response.setErrors(Arrays.asList(e.getMessage()));
 			return ResponseEntity.badRequest().body(response);
