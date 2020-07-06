@@ -9,12 +9,15 @@ import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.bulefy.api.dtos.LembreteDTO;
 import com.bulefy.api.dtos.RemedioDTO;
@@ -39,10 +42,11 @@ public class Lembrete {
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
-	@OneToMany(cascade = CascadeType.PERSIST)
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	private List<Data> dataHora;
 	
 	@OneToMany(cascade = CascadeType.PERSIST)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Remedio> remedio;
 	
 	//dd/MM/yyyy-HH:mm

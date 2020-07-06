@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +33,11 @@ public class LembreteController {
 	private UsuarioService usuarioService;
 	
 	@PostMapping("/user/reminders")
-	public ResponseEntity<Response<LembreteDTO>> criarLembrete(@Valid @RequestBody LembreteDTO dto, 
+	public ResponseEntity<Response<LembreteDTO>> criarLembrete(@Valid @RequestBody LembreteDTO lembreteDto, 
 																	Authentication auth,
 																	BindingResult result) throws UsuarioException {
 		Response<LembreteDTO> response = new Response<>();
+		this.verificarRemediosInseridos(lembreteDto, result);
 		
 		if(result.hasErrors()) {
 			List<String> errors = result.getAllErrors()
@@ -50,11 +52,17 @@ public class LembreteController {
 		Usuario usuario = usuarioService.buscarPorEmail(auth.getName())
 								.orElseThrow(() -> new UsuarioException("Usuário inexistente"));
 		
-		usuario.addLembrete(new Lembrete(dto));
+		usuario.addLembrete(new Lembrete(lembreteDto));
 		usuarioService.criarLembrete(usuario);
 		
 		response.setIdUsuario(usuario.getId());
 		return ResponseEntity.ok(response);
 	}	
-
+	
+	
+	private void verificarRemediosInseridos(LembreteDTO lembrete, BindingResult result) {
+		if(lembrete.getRemedios().isEmpty()) {
+			result.addError(new ObjectError("remedioError", "O lembrete deve possuir o menos um remédio!"));
+		}
+	}
 }

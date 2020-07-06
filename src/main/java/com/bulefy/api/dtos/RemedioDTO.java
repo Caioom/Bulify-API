@@ -1,5 +1,7 @@
 package com.bulefy.api.dtos;
 
+import javax.validation.constraints.NotEmpty;
+
 import com.bulefy.api.models.Remedio;
 
 import lombok.Getter;
@@ -17,6 +19,8 @@ public class RemedioDTO {
 	}
 	
 	private Long id;
+	
+	@NotEmpty(message = "O nome do remédio não deve estar vazio")
 	private String nome;
 	private String bula;
 }

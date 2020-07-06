@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -45,7 +46,7 @@ public class Usuario {
 	@Column(name = "senha_usuario")
 	private String senha;
 	
-	@OneToMany
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<Lembrete> lembretes;
 	
 	public void addLembrete(Lembrete lembrete) {
