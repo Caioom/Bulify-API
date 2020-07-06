@@ -13,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.bulefy.api.dtos.UsuarioDTO;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +33,7 @@ public class Usuario {
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
+	@ApiModelProperty(notes = "Id gerado no bd, não informar valor ao criar")
 	private Long id;
 	
 	@Column(name = "nome_usuario")

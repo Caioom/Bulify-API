@@ -31,7 +31,7 @@ public class Lembrete {
 	
 	public Lembrete(LembreteDTO dto) {
 		this.dataHora = this.converteData(dto.getDataHora());
-		this.remedio = this.setRemedios(dto.getRemedio());
+		this.remedio = this.setRemedios(dto.getRemedios());
 	}
 	
 	@Id

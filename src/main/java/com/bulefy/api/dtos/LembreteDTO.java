@@ -20,14 +20,14 @@ public class LembreteDTO {
 	
 	public LembreteDTO(Lembrete lembrete) {
 		this.dataHora = this.converteParaString(lembrete.getDataHora());
-		this.remedio = this.setRemedioDto(lembrete.getRemedio());
+		this.remedios = this.setRemedioDto(lembrete.getRemedio());
 	}
 	
 	@NotNull(message = "A data não pode ser vazia")
 	@NotEmpty(message = "A data não pode ser vazia")
 	private List<String> dataHora;
 	
-	private List<RemedioDTO> remedio;
+	private List<RemedioDTO> remedios;
 	
 	private List<String> converteParaString(List<Data> datas) {
 		List<String> datasString = datas.stream()

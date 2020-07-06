@@ -21,14 +21,17 @@ import com.bulefy.api.models.Lembrete;
 import com.bulefy.api.models.Usuario;
 import com.bulefy.api.services.UsuarioService;
 
+import io.swagger.annotations.Api;
+
 @RestController
 @RequestMapping("v1")
+@Api(value="LembreteController", description="O formato de datas é  dd/MM/yyyy-HH:mm  - Não informar id's também")
 public class LembreteController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
 	
-	@PostMapping("/user/reminder")
+	@PostMapping("/user/reminders")
 	public ResponseEntity<Response<LembreteDTO>> criarLembrete(@Valid @RequestBody LembreteDTO dto, 
 																	Authentication auth,
 																	BindingResult result) throws UsuarioException {

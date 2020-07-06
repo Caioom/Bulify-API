@@ -1,12 +1,8 @@
 package com.bulefy.api.dtos;
 
-import java.util.List;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-
-import com.bulefy.api.models.Lembrete;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +23,4 @@ public class UsuarioDTO {
 	@NotEmpty(message = "O usuário deve possuir uma senha")
 	@Size(min = 6)
 	private String senha;
-	
-	private List<Lembrete> lembretes;
 }

@@ -25,8 +25,11 @@ import com.bulefy.api.exceptions.UsuarioException;
 import com.bulefy.api.models.Usuario;
 import com.bulefy.api.services.UsuarioService;
 
+import io.swagger.annotations.Api;
+
 @RestController
 @RequestMapping("v1")
+@Api(value="UsuarioController", description="Não informar Id's ao registrar novos usuários")
 public class UsuarioController {
 	@Autowired
 	private UsuarioService usuarioService;
