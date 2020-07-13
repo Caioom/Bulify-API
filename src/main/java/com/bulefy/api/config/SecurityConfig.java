@@ -1,5 +1,7 @@
 package com.bulefy.api.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,13 +22,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-			.and().csrf().disable()
+		http.cors().configurationSource(request -> this.corsConfiguration())
+		.and().csrf().disable()
 		.authorizeRequests()
 		.antMatchers("/*/user/**").hasRole("USUARIO")
 		.and()
 		.addFilter(new JWTAuthenticationFilter(authenticationManager()))
 		.addFilter(new JWTAuthorizationFilter(authenticationManager(), customDetailService));
+	}
+	
+	private CorsConfiguration corsConfiguration() {
+		CorsConfiguration cors = new CorsConfiguration();
+		cors.setAllowedHeaders(Arrays.asList("*"));
+		cors.setAllowedMethods(Arrays.asList("*"));
+		cors.setAllowedOrigins(Arrays.asList("*"));
+		return cors;
 	}
 	
 	@Override

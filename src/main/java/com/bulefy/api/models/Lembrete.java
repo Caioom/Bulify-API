@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -32,6 +33,12 @@ import lombok.Setter;
 public class Lembrete {
 	public Lembrete() {}
 	
+	public Lembrete(List<Data> dataHoras, Usuario usuario, List<Remedio> remedios) {
+		this.dataHora = dataHoras;
+		this.remedio = remedios;
+		this.usuario = usuario;
+	}
+	
 	public Lembrete(LembreteDTO dto) {
 		this.dataHora = this.converteData(dto.getDataHora());
 		this.remedio = this.setRemedios(dto.getRemedios());
@@ -48,6 +55,9 @@ public class Lembrete {
 	@OneToMany(cascade = CascadeType.PERSIST)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Remedio> remedio;
+	
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	private Usuario usuario;
 	
 	//dd/MM/yyyy-HH:mm
 	@SuppressWarnings("deprecation")

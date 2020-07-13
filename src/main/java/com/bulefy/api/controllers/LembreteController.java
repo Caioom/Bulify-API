@@ -20,6 +20,7 @@ import com.bulefy.api.dtos.Response;
 import com.bulefy.api.exceptions.UsuarioException;
 import com.bulefy.api.models.Lembrete;
 import com.bulefy.api.models.Usuario;
+import com.bulefy.api.services.LembreteService;
 import com.bulefy.api.services.UsuarioService;
 
 import io.swagger.annotations.Api;
@@ -31,6 +32,9 @@ public class LembreteController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private LembreteService lembreteService;
 	
 	@PostMapping("/user/reminders")
 	public ResponseEntity<Response<LembreteDTO>> criarLembrete(@Valid @RequestBody LembreteDTO lembreteDto, 
@@ -52,8 +56,9 @@ public class LembreteController {
 		Usuario usuario = usuarioService.buscarPorEmail(auth.getName())
 								.orElseThrow(() -> new UsuarioException("Usuário inexistente"));
 		
-		usuario.addLembrete(new Lembrete(lembreteDto));
-		usuarioService.criarLembrete(usuario);
+		Lembrete lembrete = new Lembrete(lembreteDto);
+		lembrete.setUsuario(usuario);
+		lembreteService.persistir(lembrete);
 		
 		response.setIdUsuario(usuario.getId());
 		return ResponseEntity.ok(response);

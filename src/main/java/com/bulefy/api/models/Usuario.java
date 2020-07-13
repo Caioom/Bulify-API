@@ -2,6 +2,7 @@ package com.bulefy.api.models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class Usuario {
 	@Column(name = "senha_usuario")
 	private String senha;
 	
-	@OneToMany(fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, mappedBy = "usuario")
 	private List<Lembrete> lembretes;
 	
 	public void addLembrete(Lembrete lembrete) {
